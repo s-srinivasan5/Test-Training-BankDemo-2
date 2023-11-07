@@ -1,0 +1,16 @@
+ /* APCT00: CICS demo program                                        */
+ /********************************************************************/
+ /*                                                                  */
+ /* This program is the first program invoked by the 'APCT'          */
+ /* transaction.  It displays a menu screen for the on-line          */
+ /* account file application, which prompts the user for             */
+ /* input.  The transaction 'AP01' is invoked when that input        */
+ /* is received.                                                     */
+ /*                                                                  */
+ /********************************************************************/
+ APCT00: proc options(main);
+  EXEC CICS SEND MAP('ACCTMNU') MAPSET('APCTSET') FREEKB
+       ERASE MAPONLY;
+   EXEC CICS RETURN TRANSID('AP01');
+ END APCT00;
+ /*==================================================================*/

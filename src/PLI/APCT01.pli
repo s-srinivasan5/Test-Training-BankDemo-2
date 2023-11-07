@@ -1,0 +1,472 @@
+*process langlvl(saa2);
+ /* APCT01: CICS demo program                                        */
+ /********************************************************************/
+ /*                                                                  */
+ /* This program is the first invoked by the 'AP01'                  */
+ /* transaction. Tt analyzes all requests, and completes             */
+ /* those for name inquiries and record displays.  For               */
+ /* update transactions, it sends the appropriate data entry         */
+ /* screen and sets the next transaction identifier to               */
+ /* 'AP02', which completes the update operation. For print          */
+ /* requests, it starts transaction 'AP03' to do the actual          */
+ /* printing.                                                        */
+ /*                                                                  */
+ /********************************************************************/
+ APCT01: proc(dfhcommareaptr) options(main);
+   dcl dfhcommareaptr ptr;
+   dcl 1 DFHCOMMAREA based(dfhcommareaptr),
+         2 * union,
+           3 SRCH_COMM                 char(44),
+           3 IN_COMM                   char(41),
+           3 CTYPE                     char(1);
+   dcl MSG_NO                          fixed bin(15) init(0);
+   dcl ACCT_LNG                        fixed bin(15) init(383);
+   dcl DTL_LNG                         fixed bin(15) init(751);
+   %replace stars                      by '************';
+   dcl 1 use_str static,         /* temp 1/26 */
+         2 * union,
+           3 USE_QID                   char(8),
+           3 *,
+             4 USE_QID1                char(3) init('AP0'),
+             4 USE_QID2                char(5),
+         2 USE_REC,
+           3 USE_TERM                  char(4) init(''),
+           3 USE_TIME                  fixed dec(7),
+           3 USE_DATE                  fixed dec(7),
+         2 USE_LIMIT                   fixed dec(7) init(1000),
+         2 USE_ITEM                    fixed bin(15) init(1),
+         2 USE_LNG                     fixed bin(15) init(12);
+   dcl 1 in_area,
+           3 IN_TYPE                   char(1) init('R'),
+           3 IN_REQ,
+             4 REQC                    char(1) init(''),
+             4 ACCTC                   char(5) init(''),
+             4 PRTRC                   char(4) init(''),
+           3 IN_NAMES,
+             4 SNAMEC                  char(18) init(''),
+             4 FNAMEC                  char(12) init('');
+   dcl 1 COMMAREA_FOR_APCT04,
+         3 ERR_PGRMID              char(8) init('APCT01'),
+         3 * union,
+           4 ERR_CODE              char(2),
+           4 *,
+             5 ERR_FN              char(1),
+             5 ERR_RCODE           char(1);
+   dcl LINE_CNT                    fixed bin(15) init(0);
+   %replace MAX_LINES              by 6;
+   dcl 1 srch_str,
+         2 SRCH_CTRL,
+           3 *                         char(1) init('S'),
+           3 BRKEY,
+             4 BRKEY_SNAME             char(12),
+           3 BRKEY_ACCT                char(5),
+           3 MAX_SNAME                 char(12),
+           3 MAX_FNAME                 char(7),
+           3 MIN_FNAME                 char(7),
+         2 SUM_LINE,
+           3 ACCTDO                    char(5),
+           3 *                         char(3) init(''),
+           3 SNAMEDO                   char(12),
+           3 *                         char(2) init(''),
+           3 FNAMEDO                   char(7),
+           3 *                         char(2) init(''),
+           3 MIDO                      char(1),
+           3 *                         char(2) init(''),
+           3 TTLDO                     char(4),
+           3 *                         char(2) init(''),
+           3 ADDR1DO                   char(24),
+           3 *                         char(2) init(''),
+           3 STATDO                    char(2),
+           3 *                         char(3) init(''),
+           3 LIMITDO                   char(8),
+         2 PAY_LINE,
+           3 BAL                       char(8),
+           3 *                         char(6) init(''),
+           3 BMO                       PIC '99',
+           3 *                         char(1) init('/'),
+           3 BDAY                      PIC '99',
+           3 *                         char(1) init('/'),
+           3 BYR                       PIC '99',
+           3 *                         char(4) init(''),
+           3 BAMT                      char(8),
+           3 *                         char(7) init(''),
+           3 PMO                       PIC '99',
+           3 *                         char(1) init('/'),
+           3 PDAY                      PIC '99',
+           3 *                         char(1) init('/'),
+           3 PYR                       PIC '99',
+           3 *                         char(4) init(''),
+           3 PAMT                      char(8);
+
+   %replace msg11_len by 48;
+   %replace msg11 by 'THIS ACCOUNT NUMBER ALREADY IN USE AT TERMINAL ';
+   dcl 1 msg_str based(addr(msg_text(11))),
+         2 * char(msg11_len),
+         2 MSG_TERM char (length(use_term));
+   dcl 1 MSG_TEXT(15) static char(70) init(
+        'NAMES MUST BE ALPHABETIC, AND SURNAME IS REQUIRED.',
+        'ENTER SOME INPUT AND USE ONLY "CLEAR" OR "ENTER".',
+        'REQUEST TYPE REQUIRED; MUST BE "D", "P", "A", "M" OR "X".',
+        'PRINTER NAME REQUIRED ON PRINT REQUESTS',
+        'ACCOUNT NUMBER REQUIRED (BETWEEN 10000 AND 79999)',
+        'ACCOUNT NO. MUST BE NUMERIC AND FROM 10000 TO 79999',
+        ('NO NAMES ON LOCAL FILE MATCHING YOUR REQUEST, ' ||
+         'HOST LINK NOT AVAILABLE'),
+        ('ENTER EITHER NAME OR A ' ||
+         'REQUEST TYPE AND ACCOUNT NUMBER'),
+        'THIS ACCOUNT NUMBER ALREADY EXISTS',
+        ('NO LOCAL RECORD OF THIS ACCOUNT NUMBER, ' ||
+         'HOST LINK NOT AVAILABLE'),
+        msg11,
+        'PRINT REQUEST SCHEDULED',
+        'PRINTER NAME NOT RECOGNIZED',
+        'INPUT ERROR; PLEASE RETRY; USE ONLY "CLEAR" OR "ENTER" KEY',
+        'THERE ARE MORE MATCHING NAMES. PRESS PA2 TO CONTINUE.');
+
+   %include DFHBMSCA;
+   %include DFHAID;
+   dcl 1 acctrec,
+   %include ACCTREC;
+   %include APCTSET;
+
+   %replace alphabetic by
+              'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+
+   %replace alphabetic_lower by 'abcdefghijklmnopqrstuvwxyz ';
+
+   %replace alphabetic_upper by 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+
+   %replace numeric_sign by '0123456789+-';
+   %replace numeric      by '0123456789';
+
+ /********************************************************************/
+ /*                                                                  */
+ /********************************************************************/
+
+   EXEC CICS HANDLE CONDITION MAPFAIL(NO_MAP)
+       NOTFND(SRCH_ANY)
+       ENDFILE(SRCH_DONE)
+       QIDERR(RSRV_1)
+       TERMIDERR(TERMID_ERR)
+       ERROR(OTHER_ERRORS);
+   EXEC CICS IGNORE CONDITION DUPKEY;
+   CALL PLIFILL(ADDR(ACCTMNUI),'00'X,STG(ACCTMNUI));
+   CALL PLIFILL(ADDR(ACCTDTLI),'00'X,STG(ACCTDTLI));
+   dcl itemp fixed;
+   itemp = 1234;
+   IF EIBAID = DFHCLEAR then
+     IF EIBCALEN = 0 then
+       do;
+         /*EXEC CICS XCTL PROGRAM('ACCTMENU'); */
+         EXEC CICS SEND CONTROL FREEKB;
+         EXEC CICS RETURN;
+       end;
+     ELSE GO TO NEW_MENU;
+   /*?? IF EIBAID = DFHPA2 & EIBCALEN > 0 & CTYPE = 'S' then */
+   IF EIBAID = DFHPA2 then if EIBCALEN > 0 then if CTYPE = 'S' then
+     do;
+       string(SRCH_CTRL) = SRCH_COMM;
+       GO TO SRCH_RESUME;
+     end;
+   /*?? IF EIBCALEN > 0 & CTYPE = 'R' then  */
+   IF EIBCALEN > 0 then if CTYPE = 'R' then
+     string(IN_AREA) = IN_COMM;
+   EXEC CICS RECEIVE MAP('ACCTMNU') MAPSET('APCTSET');
+   IF REQML > 0 then
+     REQC = REQMI;
+   IF unspec(REQMF) ^= ''b then
+     REQC = '';
+   IF ACCTML > 0 then
+     ACCTC = ACCTMI;
+   IF unspec(ACCTMF) ^= ''b then
+     ACCTC = '';
+   IF PRTRML > 0 then
+     PRTRC = PRTRMI;
+   IF unspec(PRTRMF) ^= ''b then
+     PRTRC = '';
+   IF SNAMEML > 0 then
+     SNAMEC =SNAMEMI;
+   IF unspec(SNAMEMF) ^= ''b then
+     SNAMEC = '';
+   IF FNAMEML > 0 then
+     FNAMEC = FNAMEMI;
+   IF unspec(FNAMEMF) ^= ''b then
+     FNAMEC = '';
+   CALL PLIFILL(ADDR(ACCTMNUI),'00'X,STG(ACCTMNUI));
+   IF string(IN_NAMES) = '' then GO TO CK_ANY;
+   IF verify(FNAMEC, ALPHABETIC) ^= 0 then
+     do;
+       MSG_NO = 1;
+       FNAMEML = -1;
+       FNAMEMA = DFHBMBRY;
+     end;
+   IF SNAMEC = '' then
+     SNAMEMO = stars;
+   ELSE
+     IF verify(SNAMEC, ALPHABETIC) = 0 then
+       GO TO CK_NAME;
+   MSG_NO = 1;
+   SNAMEML = -1;
+   SNAMEMA = DFHBMBRY;
+
+ CK_NAME:
+   IF MSG_NO > 0 then
+     GO TO MENU_RESEND;
+
+ SRCH_INIT:
+   BRKEY_SNAME, MAX_SNAME = SNAMEC;
+   unspec(BRKEY_ACCT) = ''b;
+   MAX_SNAME = translate (MAX_SNAME, 'ff'x, ' ');
+   MIN_FNAME, MAX_FNAME = FNAMEC;
+   MIN_FNAME = translate (MIN_FNAME, '00'x, ' ');
+   MAX_FNAME = translate (MAX_FNAME, 'ff'x, ' ');
+
+ SRCH_RESUME:
+   EXEC CICS STARTBR DATASET('ACCTIX') RIDFLD(BRKEY) GTEQ;
+
+ SRCH_LOOP:
+   EXEC CICS READNEXT DATASET('ACCTIX') INTO(ACCTREC)
+       LENGTH(ACCT_LNG) RIDFLD(BRKEY);
+   IF ACCTREC.SNAMEDO > MAX_SNAME then
+     GO TO SRCH_DONE;
+   IF ACCTREC.FNAMEDO < MIN_FNAME |
+      ACCTREC.FNAMEDO > MAX_FNAME then
+     GO TO SRCH_LOOP;
+   LINE_CNT = LINE_CNT + 1;
+   IF LINE_CNT > MAX_LINES then
+     do;
+       MSGMO = MSG_TEXT(15);
+       MSGMA = DFHBMBRY;
+       GO TO SRCH_DONE;
+     end;
+   SUM_LINE = ACCTREC, by name;
+   SUMLNMO(LINE_CNT) = string(SUM_LINE);
+   GO TO SRCH_LOOP;
+
+ SRCH_DONE:
+   EXEC CICS ENDBR DATASET('ACCTIX');
+
+ SRCH_ANY:
+   IF LINE_CNT = 0 then
+     do;
+       MSG_NO = 7;
+       SNAMEML = -1;
+       GO TO MENU_RESEND;
+     end;
+   SUMLNMA = DFHBMUNP;
+   MSGMA = DFHBMBRY;
+   SUMTTLMA = DFHBMASB;
+   EXEC CICS SEND MAP('ACCTMNU') MAPSET('APCTSET')
+       FREEKB DATAONLY ERASEAUP;
+   IF LINE_CNT ^> MAX_LINES then
+     EXEC CICS RETURN TRANSID('AP01');
+   ELSE
+     EXEC CICS RETURN TRANSID('AP01') COMMAREA(SRCH_CTRL)
+         LENGTH(44);
+
+ CK_ANY:
+   IF string(IN_REQ) = '' then
+     do;
+       SNAMEML = -1;
+       MSG_NO = 8;
+       GO TO MENU_RESEND;
+     end;
+
+ CK_ACCTNO_1:
+   IF ACCTC = '' then
+     do;
+       ACCTMO = stars;
+       MSG_NO = 5;
+       GO TO ACCT_ERR;
+     end;
+   IF ACCTC < '10000' |
+      ACCTC > '79999' |
+      verify(ACCTC, numeric) ^= 0 then
+     do;
+       MSG_NO = 6;
+       GO TO ACCT_ERR;
+     end;
+
+ CK_ACCTNO_2:
+   EXEC CICS HANDLE CONDITION NOTFND(NO_ACCT_RECORD);
+   EXEC CICS READ DATASET('ACCTFIL') RIDFLD(ACCTC)
+       INTO(ACCTREC) LENGTH(ACCT_LNG);
+   IF REQC = 'A' then
+     do;
+       MSG_NO = 9;
+       GO TO ACCT_ERR;
+     end;
+   ELSE
+     GO TO CK_REQ;
+
+ NO_ACCT_RECORD:
+   IF REQC = 'A' then
+     GO TO CK_REQ;
+   MSG_NO = 10;
+
+ ACCT_ERR:
+   ACCTML = -1;
+   ACCTMA = DFHBMBRY;
+
+ CK_REQ:
+   IF REQC = 'D' |
+      REQC = 'P' |
+      REQC = 'A' |
+      REQC = 'M' |
+      REQC = 'X'
+   then
+     IF MSG_NO = 0 then
+       GO TO CK_USE;
+     ELSE
+       GO TO MENU_RESEND;
+   IF REQC = '' then
+     REQMO = stars;
+   REQML = -1;
+   REQMA = DFHBMBRY;
+   MSG_NO = 3;
+   GO TO MENU_RESEND;
+
+ CK_USE:
+   IF REQC = 'P' |
+      REQC = 'D' then
+     GO TO BUILD_MAP;
+   USE_QID2 = ACCTC;
+   EXEC CICS READQ TS QUEUE(USE_QID) INTO(USE_REC)
+       ITEM(USE_ITEM) LENGTH(USE_LNG);
+   USE_TIME = USE_TIME + USE_LIMIT;
+   IF USE_TIME > 236000 then
+     do;
+       USE_DATE = USE_DATE + 1;
+       USE_TIME = USE_TIME - 236000;
+     end;
+   IF USE_DATE > EIBDATE |
+     (USE_DATE = EIBDATE &
+      USE_TIME ^< EIBTIME) then
+     do;
+       MSG_TERM = USE_TERM;
+       MSG_NO = 11;
+       ACCTML = -1;
+       ACCTMA = DFHBMBRY;
+       GO TO MENU_RESEND;
+     end;
+
+ RSRV:
+   USE_TERM = EIBTRMID;
+   USE_TIME = EIBTIME;
+   USE_DATE = EIBDATE;
+   EXEC CICS WRITEQ TS QUEUE(USE_QID) FROM(USE_REC)
+       LENGTH(12) ITEM(USE_ITEM) REWRITE;
+   GO TO BUILD_MAP;
+
+ RSRV_1:
+   USE_TERM = EIBTRMID;
+   USE_TIME = EIBTIME;
+   USE_DATE = EIBDATE;
+   EXEC CICS WRITEQ TS QUEUE(USE_QID) FROM(USE_REC)
+       LENGTH(12);
+
+ BUILD_MAP:
+   IF REQC = 'X' then
+     do;
+       TITLEDO = 'DELETION';
+       VFYDL = -1;
+       VFYDA = DFHBMUNP;
+       MSGDO = 'ENTER "Y" TO CONFIRM OR "CLEAR" TO CANCEL';
+     end;
+   ELSE
+     SNAMEDL = -1;
+   IF REQC = 'A' then
+     do;
+       TITLEDO = 'NEW RECORD';
+       STATTLDA, LIMTTLDA, HISTTLDA = DFHPROTN;
+       ACCTDI = ACCTC;
+       MSGDO = 'FILL IN AND PRESS "ENTER," OR "CLEAR" TO CANCEL';
+       GO TO SEND_DETAIL;
+     end;
+   IF REQC = 'M' then
+     do;
+       TITLEDO = 'RECORD CHANGE';
+       MSGDO = 'MAKE CHANGES AND "ENTER" OR "CLEAR" TO CANCEL';
+     end;
+   ELSE
+     IF REQC = 'D' then
+       MSGDO = 'PRESS "CLEAR" OR "ENTER" WHEN FINISHED';
+   ACCTDTLO = ACCTREC, by name;
+   PAY_LINE = PAY_HIST(1), by name;
+   HIST1DO = string(PAY_LINE);
+   PAY_LINE = PAY_HIST(2), by name;
+   HIST2DO = string(PAY_LINE);
+   PAY_LINE = PAY_HIST(3), by name;
+   HIST3DO = string(PAY_LINE);
+   IF REQC = 'M' then
+     GO TO SEND_DETAIL;
+   ELSE
+     IF REQC = 'P' then
+       GO TO PRINT_PROC;
+   SNAMEDA, FNAMEDA, MIDA, TTLDA, TELDA, ADDR1DA,
+      ADDR2DA, ADDR3DA, AUTH1DA, AUTH2DA, AUTH3DA,
+      AUTH4DA, CARDSDA, IMODA, IDAYDA, IYRDA, RSNDA,
+      CCODEDA, APPRDA, SCODE1DA, SCODE2DA, SCODE3DA  = DFHBMASK;
+
+ SEND_DETAIL:
+   EXEC CICS SEND MAP('ACCTDTL') MAPSET('APCTSET') ERASE FREEKB
+       CURSOR;
+   IF REQC = 'D' then
+     EXEC CICS RETURN TRANSID('APCT');
+   ELSE
+     EXEC CICS RETURN TRANSID('AP02')
+        COMMAREA(IN_REQ) LENGTH(6);
+
+ PRINT_PROC:
+   IF PRTRC = '' then
+     do;
+       PRTRMO = stars;
+       MSG_NO = 4;
+       GO TO TERMID_ERR1;
+     end;
+   EXEC CICS START TRANSID('AP03') FROM(ACCTDTLO)
+       LENGTH(DTL_LNG) TERMID(PRTRC);
+   MSGMO = MSG_TEXT(12);
+   EXEC CICS SEND MAP('ACCTMNU') MAPSET ('APCTSET') DATAONLY
+        ERASEAUP FREEKB;
+   EXEC CICS RETURN TRANSID('AP01');
+
+ TERMID_ERR:
+   MSG_NO = 13;
+
+ TERMID_ERR1:
+   PRTRML = -1;
+   PRTRMA = DFHBMBRY;
+
+ MENU_RESEND:
+   MSGMO = MSG_TEXT(MSG_NO);
+   EXEC CICS SEND MAP('ACCTMNU') MAPSET('APCTSET')
+       CURSOR FRSET FREEKB;
+   EXEC CICS RETURN TRANSID('AP01') COMMAREA(IN_AREA)
+           LENGTH(41);
+
+ NO_MAP:
+   IF EIBAID = DFHPA1 |
+      EIBAID = DFHPA2 |
+      EIBAID = DFHPA3 |
+      EIBAID = DFHENTER then
+     do;
+       MSG_NO = 2;
+       SNAMEML = -1;
+       GO TO MENU_RESEND;
+     end;
+   MSGMO = MSG_TEXT(14);
+
+ NEW_MENU:
+   EXEC CICS SEND MAP('ACCTMNU') MAPSET('APCTSET')
+       FREEKB ERASE;
+   EXEC CICS RETURN TRANSID ('AP01');
+
+ OTHER_ERRORS:
+   ERR_FN = EIBFN;
+   ERR_RCODE = EIBRCODE;
+   EXEC CICS HANDLE CONDITION ERROR;
+   EXEC CICS LINK PROGRAM('APCT04')
+       COMMAREA(COMMAREA_FOR_APCT04) LENGTH(10);
+
+ end;

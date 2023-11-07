@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="cobolProject" name="BankDemo2" uuid="151de70a-dfa0-4810-8c7b-2ac9cba32e54" version="5.0">
+   <settings xsi:type="projectSettingsContainer">
+      <copybook-paths xsi:type="copybookPathsSettings">
+         <path enabled="true" name="/BankDemo2" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/listing" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/loadlib" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/loadlib/bms" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/loadlib/cobol" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/PLI" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/bms" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/cbl" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/copybook" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/copybook/bms" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/jcl" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/system" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/system/Data" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/system/logs" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/system/rdef" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/branches" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/hooks" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs/refs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs/refs/heads" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects/info" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects/pack" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs/heads" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs/tags" type="mfpath"/>
+      </copybook-paths>
+      <build-precedence-paths xsi:type="buildPrecedenceSettings">
+         <path enabled="true" name="/BankDemo2" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/listing" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/loadlib" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/loadlib/bms" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/loadlib/cobol" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/PLI" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/bms" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/cbl" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/copybook" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/copybook/bms" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/src/jcl" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/system" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/system/Data" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/system/logs" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/system/rdef" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/branches" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/hooks" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/logs" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/logs/refs" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/logs/refs/heads" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/objects" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/objects/info" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/objects/pack" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/refs" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/refs/heads" type="mfpath"/>
+         <path enabled="true" name="/BankDemo2/.git/refs/tags" type="mfpath"/>
+      </build-precedence-paths>
+      <configurations default="New Configuration" linkedWith="2017" xsi:type="buildConfigurationsContainer">
+         <configuration description="New Configuration" type="all_dll" xsi:type="cobolBuildConfiguration">
+            <targetdir name="BankDemo2"/>
+            <application_configuration xsi:type="runtimeConfigurationSettings">
+               <cobol_switches xsi:type="projectCobolSwitches"/>
+               <rts_switches xsi:type="projectRtsSwitches">
+                  <rts_switch name="A" value="on" index="1"/>
+                  <rts_switch name="D" value="off" index="0"/>
+                  <rts_switch name="F" value="on" index="0"/>
+                  <rts_switch name="I" value="off" index="2"/>
+                  <rts_switch name="O" value="on" index="0"/>
+                  <rts_switch name="S" value="off" index="5"/>
+               </rts_switches>
+               <deployment>
+                  <tunable name="reuse_container" value="true" index="0"/>
+                  <tunable name="reuse_container_after_error" value="true" index="0"/>
+                  <tunable name="app_always_exits" value="true" index="0"/>
+               </deployment>
+               <envScriptParameters></envScriptParameters>
+               <envScriptPath></envScriptPath>
+               <inheritBuildEnv>false</inheritBuildEnv>
+               <tunables>
+                  <tunable name="screen_lines" value="25" index="0"/>
+                  <tunable name="screen_cols" value="80" index="0"/>
+                  <tunable name="default_cancel_mode" value="2" index="0"/>
+               </tunables>
+            </application_configuration>
+            <link_settings xsi:type="linkSettings">
+               <options>
+                  <option id="targetName" name="linkSettings" value="BankDemo2"/>
+                  <option id="applicationType" name="linkSettings" value="console"/>
+                  <option id="outputDirectory" name="linkSettings" value="loadlib/cobol"/>
+                  <option id="type" name="linkSettings" value="all_dll"/>
+                  <option id="threadedRts" name="linkSettings" value="threadedRts"/>
+                  <option id="runtimeModel" name="linkSettings" value="shared"/>
+                  <option id="platform" name="linkSettings" value="Windows"/>
+                  <option id="bitism" name="linkSettings" value="32 bit"/>
+               </options>
+               <additional_files/>
+            </link_settings>
+            <deploy_settings xsi:type="deploySettings">
+               <options>
+                  <option id="deployFolder" name="deploySettings" value="deploy"/>
+                  <option id="cleanAllowed" name="deploySettings" value="cleanAllowed"/>
+                  <option id="deployFiles" name="deploySettings" value=""/>
+                  <option id="deployPatterns" name="deploySettings" value="New_Configuration.bin/*${exeext}"/>
+               </options>
+            </deploy_settings>
+         </configuration>
+      </configurations>
+      <ims_settings xsi:type="additionalImsSettings">
+         <generatedFileDir name=""/>
+         <imsDatabaseDir name=""/>
+      </ims_settings>
+      <imscopy-paths xsi:type="imsCopyPathsSettings">
+         <path enabled="true" name="/BankDemo2" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/listing" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib/cobol" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/PLI" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/cbl" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/copybook" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/copybook/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/jcl" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/Data" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/logs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/rdef" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/branches" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/hooks" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs/refs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs/refs/heads" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects/info" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects/pack" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs/heads" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs/tags" type="mfpath"/>
+      </imscopy-paths>
+      <jcl-include-paths xsi:type="jclIncludePathsSettings">
+         <path enabled="true" name="/BankDemo2" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/listing" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib/cobol" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/PLI" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/cbl" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/copybook" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/copybook/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/jcl" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/Data" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/logs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/rdef" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/branches" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/hooks" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs/refs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs/refs/heads" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects/info" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects/pack" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs/heads" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs/tags" type="mfpath"/>
+      </jcl-include-paths>
+      <asmmacro-paths xsi:type="assemblerMacroPathsSettings">
+         <path enabled="true" name="/BankDemo2" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/listing" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/loadlib/cobol" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/PLI" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/cbl" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/copybook" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/copybook/bms" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/src/jcl" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/Data" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/logs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/system/rdef" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/branches" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/hooks" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs/refs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/logs/refs/heads" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects/info" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/objects/pack" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs/heads" type="mfpath"/>
+         <path enabled="false" name="/BankDemo2/.git/refs/tags" type="mfpath"/>
+      </asmmacro-paths>
+      <dependent-projects xsi:type="dependentProjectsSettings"/>
+      <asm_link_settings xsi:type="assemblerLinkSettings">
+         <options>
+            <option id="link_create_debug_info" name="mf370lnk" value="ANIM"/>
+            <option id="link_mark_reentrant" name="mf370lnk" value="RENT"/>
+            <option id="link_addressing_mode" name="mf370lnk" value="AMODE(31)"/>
+            <option id="link_residency_mode" name="mf370lnk" value="RMODE(31)"/>
+            <option id="link_generate_listing" name="mf370lnk" value="NOLIST"/>
+            <option id="link_mark_reusable" name="mf370lnk" value="REUS"/>
+            <option id="link_linker_output" name="mf370lnk" value="OMF(390)"/>
+            <option id="link_resolve_external" name="mf370lnk" value="CALL"/>
+         </options>
+      </asm_link_settings>
+   </settings>
+   <files xsi:type="projectFileStore">
+      <filetype type="macro" xsi:type="cobolFileContainer"/>
+      <filetype type="cobol" xsi:type="cobolFileContainer">
+         <file compile="true" path="src/cbl/BBANK10P.cbl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/cbl/DBANK01P.cbl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/cbl/DBANK51P.cbl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/cbl/DBANK52P.cbl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/cbl/SBANK00P.cbl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/cbl/SBANK10P.cbl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/cbl/ZBNKEXT1.cbl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/cbl/ZBNKPRT1.cbl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/cbl/ZBNKPRT2.cbl" xsi:type="cobolFile"/>
+      </filetype>
+      <filetype type="asm" xsi:type="cobolFileContainer"/>
+      <filetype type="psb" xsi:type="cobolFileContainer"/>
+      <filetype type="jcl" xsi:type="cobolFileContainer">
+         <file compile="true" path="src/PLI/sstmcics.jcl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/jcl/ZBNKLIST.jcl" xsi:type="cobolFile"/>
+         <file compile="true" path="src/jcl/ZBNKSTMT.jcl" xsi:type="cobolFile"/>
+      </filetype>
+      <filetype type="rexx" xsi:type="cobolFileContainer"/>
+      <filetype type="bms" xsi:type="cobolFileContainer">
+         <file compile="true" path="src/PLI/ACCTSET.bms" xsi:type="cobolFile"/>
+         <file compile="true" path="src/PLI/APCTSET.bms" xsi:type="cobolFile"/>
+         <file compile="true" path="src/bms/MBANK10.bms" xsi:type="cobolFile"/>
+      </filetype>
+      <filetype type="mfs" xsi:type="cobolFileContainer"/>
+      <filetype type="clist" xsi:type="cobolFileContainer"/>
+      <filetype type="easytrieve" xsi:type="cobolFileContainer"/>
+      <filetype type="cobol.copybook" xsi:type="cobolFileContainer"/>
+      <filetype type="lin" xsi:type="cobolFileContainer"/>
+      <filetype type="dbd" xsi:type="cobolFileContainer"/>
+      <folders xsi:type="cobolFolderContainer">
+         <folder compile="true" path="src/PLI" xsi:type="cobolFolder"/>
+         <folder compile="true" path="src/cbl" xsi:type="cobolFolder"/>
+         <folder compile="true" path="src/bms" xsi:type="cobolFolder"/>
+         <folder compile="true" path="src/jcl" xsi:type="cobolFolder"/>
+      </folders>
+   </files>
+</project>

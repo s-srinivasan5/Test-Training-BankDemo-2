@@ -1,0 +1,114 @@
+*process system(cics) or('|') not('^') langlvl(saa2);
+ /* APCT04: CICS demo program                                        */
+ /********************************************************************/
+ /*                                                                  */
+ /* This program is a general purpose error routine.                 */
+ /* Control is transferred to it by other programs in the            */
+ /* online account file application when an unrecoverable            */
+ /* error has occurred.                                              */
+ /* It sends a message to input terminal describing the              */
+ /* type of error and asks the operator to report it.                */
+ /* Then it abends, so that any updates made in the                  */
+ /* uncompleted transaction are backed out and so that an            */
+ /* abend dump is available.                                         */
+ /*                                                                  */
+ /********************************************************************/
+ APCT04: proc(dfhcommareaptr) options(main);
+   dcl dfhcommareaptr ptr;
+   dcl 1 dfhcommarea based(dfhcommareaptr),
+         2 ERR_PGRMID              char(8),
+         2 * union,
+           3 ERR_CODE              char(2),
+           3 *,
+             4 ERR_FN              char(1),
+             4 ERR_RCODE           char(1),
+         2 * char(0);
+   dcl ix                          fixed bin(31);
+   %replace max_msgs               by 31;
+   dcl 1 * union static,
+         2 DSN_MSG                 char(22),
+         2 *,
+           3 *                     char(13) init('THE FILE IS: '),
+           3 DSN                   char(8),
+           3 *                     char(1) init('.');
+   dcl HEX_CODE(max_msgs) char(2) static init(
+                  '0601'x,
+                  '0602'x,
+                  '0608'x,
+                  '060C'x,
+                  '060F'x,
+                  '0680'x,
+                  '0681'x,
+                  '0682'x,
+                  '0683'x,
+                  '06E1'x,
+                  '0A01'x,
+                  '0A02'x,
+                  '0A04'x,
+                  '0A08'x,
+                  '0A20'x,
+                  '0AE1'x,
+                  '0E01'x,
+                  '0EE1'x,
+                  '1001'x,
+                  '1004'x,
+                  '1011'x,
+                  '1012'x,
+                  '1014'x,
+                  '1081'x,
+                  '10E1'x,
+                  '10E9'x,
+                  '10FF'x,
+                  '1804'x,
+                  '1808'x,
+                  '18E1'x,
+                  '0001'x);
+   dcl ERR_MSG(max_msgs) char(60) static init(
+         'A PROGRAM OR FCT TABLE ERROR (INVALID FILE NAME).',
+         'A PROGRAM OR FILE ERROR (VSAM ILLOGIC).',
+         'A PROGRAM OR FCT TABLE ERROR (INVALID FILE REQUEST).',
+         'A FILE BEING CLOSED THAT MUST BE OPEN.',
+         'A PROGRAM OR FILE ERROR (UNEXPECTED END_OF_FILE).',
+         'A FILE INPUT/OUTPUT ERROR.',
+         'A PROGRAM OR FILE ERROR (RECORD NOT FOUND).',
+         'A PROGRAM OR FILE ERROR (DUPLICATE RECORD).',
+         'INADEQUATE SPACE IN A FILE.',
+         'A PROGRAM OR FILE ERROR (LENGTH ERROR), FILE CONTROL).',
+         'A PROGRAM OR TEMPORARY STORAGE ERROR (ITEM ERROR).',
+         'A PROGRAM OR TEMPORARY STORAGE ERROR (UNKNOWN QUEUE).',
+         'AN INPUT/OUTPUT ERROR IN TEMPORARY STORAGE.',
+         'NO SPACE IN TEMPORARY STORAGE.',
+         'A PROGRAM OR SYSTEM ERROR (INVALID REQUEST IN TS).',
+         'A PROGRAM OR TEMPORARY STORAGE ERROR (TS LENGTH ERROR)',
+         'A PROGRAM OR PPT TABLE ERROR (UNKNOWN PROGRAM NAME).',
+         'A PROGRAM ERROR (INVALID PROGRAM REQUEST).',
+         'A PROGRAM ERROR (END OF DATA), (USING IC).',
+         'AN INPUT/OUTPUT ERROR IN TEMPORARY STORAGE (USING IC).',
+         'A PROGRAM OR PCT TABLE ERROR (TRANSID ERROR USING IC).',
+         'A PROGRAM OR TCT TABLE ERROR (TERMIDERR USING IC).',
+         'A PROGRAM OR SYSTEM ERROR (INVTSREQ USING IC).',
+         'A PROGRAM OR SYSTEM ERROR (NOT FOUND USING IC).',
+         'A PROGRAM OR TEMP STORAGE ERROR (IC LENGTH ERROR).',
+         'A PROGRAM ERROR (INVALID REQUEST USING IC).',
+         'A PROGRAM ERROR (ENVDEFERR USING IC).',
+         'A PROGRAM ERROR (BMS MAPFAIL).',
+         'A PROGRAM ERROR (INVALID MAP SIZE).',
+         'A PROGRAM ERROR (BMS LENGTH ERROR).',
+         'AN UNKNOWN TYPE OF ERROR.');
+   %include APCTSET;
+ /********************************************************************/
+
+   CALL PLIFILL(ADDR(ACCTERRO),'00'X,STG(ACCTERRO));
+   do ix = 1 to 31 until(HEX_CODE(ix) = ERR_CODE);
+   end;
+   rsneo = ERR_MSG(IX);
+   traneo = EIBTRNID;
+   pgmeo = ERR_PGRMID;
+   IF IX < 11 then
+     do;
+       dsn = EIBDS;
+       fileeo = DSN_MSG;
+     end;
+   EXEC CICS SEND MAP('ACCTERR') MAPSET('APCTSET') ERASE FREEKB;
+   EXEC CICS ABEND ABCODE('EACC');
+ end;

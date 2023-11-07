@@ -1,0 +1,71 @@
+*process system(cics) or('|') not('^') langlvl(saa2);
+ /*;APCT03: CICS demo program                                         */
+ /********************************************************************/
+ /*                                                                  */
+ /* This program is the first invoked by transactions                */
+ /* 'AP03', 'AClg' and 'AP05'. 'AP03' completes a request            */
+ /* for printing of a customer record, which was processed           */
+ /* initially by transaction 'AP01'. 'AClg' which is a               */
+ /* user request to print the log, merely requests 'AP05'            */
+ /* be started when the log printer ('L86O') is available.           */
+ /* 'AP05' transfers the log data from temporary storage to          */
+ /* the printer.                                                     */
+ /*                                                                  */
+ /********************************************************************/
+ APCT03: proc options(main);
+   dcl 1 COMMAREA_FOR_APCT04,
+         2 ERR_PGM                     char(8) init('APCT03'),
+         2 * union,
+           3 ERR_CODE              char(2),
+           3 *,
+             4 ERR_FN              char(1),
+             4 ERR_RCODE           char(1),
+         2 * char(0);
+ /*        following declaration changed to use init since value does
+           not exist on mainframe PL/I andit causes problems because
+           it creates a named CONSTANT
+   dcl TS_LNG                          fixed bin(15) value(751);
+ */
+   dcl TS_LNG                          fixed bin(15) init(751);
+   %include APCTSET;
+
+ /********************************************************************/
+   EXEC CICS HANDLE CONDITION ITEMERR(LOG_END)
+       QIDERR(RTRN) ERROR(NO_GOOD);
+   IF EIBTRNID = 'AP03' then GO TO AP03;
+   IF EIBTRNID = 'ACLG' then GO TO ACLG; ELSE GO TO AP05;
+
+ AP03:
+   EXEC CICS RETRIEVE INTO(ACCTDTLI) LENGTH(TS_LNG);
+   EXEC CICS SEND MAP('ACCTDTL') MAPSET('APCTSET') PRINT
+       ERASE;
+   GO TO RTRN;
+
+ ACLG:
+   EXEC CICS START TRANSID('AP05') TERMID('L86O');
+   CALL PLIFILL(ADDR(ACCTMSGO),'00'X,STG(ACCTMSGO));
+   msgo = 'PRINTING OF LOG HAS BEEN SCHEDULED';
+   EXEC CICS SEND MAP('ACCTMSG') MAPSET('APCTSET')
+       FREEKB;
+   GO TO RTRN;
+
+ AP05:
+   EXEC CICS READQ TS QUEUE('ACCTLOG') INTO (ACCTDTLI)
+       LENGTH(TS_LNG) NEXT;
+   EXEC CICS SEND MAP('ACCTDTL') MAPSET('APCTSET') PRINT ERASE;
+   GO TO AP05;
+
+ LOG_END:
+   EXEC CICS DELETEQ TS QUEUE('ACCTLOG');
+
+ RTRN:
+   EXEC CICS RETURN;
+
+ NO_GOOD:
+   ERR_FN = eibfn;
+   ERR_RCODE = eibrcode;
+   EXEC CICS HANDLE CONDITION ERROR;
+   EXEC CICS LINK PROGRAM('APCT04')
+       COMMAREA(COMMAREA_FOR_APCT04) LENGTH(10);
+
+ end;

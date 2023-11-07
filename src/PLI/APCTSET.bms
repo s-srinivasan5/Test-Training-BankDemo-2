@@ -1,0 +1,300 @@
+APCTSET DFHMSD TYPE=&SYSPARM,MODE=INOUT,LANG=PLI,                      X
+               STORAGE=AUTO,TIOAPFX=YES,EXTATT=YES                      
+*       MENU MAP.                                                       
+ACCTMNU DFHMDI SIZE=(24,80),CTRL=(FREEKB)                               
+        DFHMDF POS=(1,1),ATTRB=(ASKIP,NORM),LENGTH=18,                 X
+               INITIAL='ACCOUNT FILE: MENU',COLOR=TURQUOISE             
+        DFHMDF POS=(3,4),ATTRB=(ASKIP,NORM),LENGTH=25,                 X
+               INITIAL='TO SEARCH BY NAME, ENTER:',COLOR=TURQUOISE      
+        DFHMDF POS=(3,63),ATTRB=(ASKIP,NORM),LENGTH=12,                X
+               INITIAL='ONLY SURNAME',COLOR=TURQUOISE                   
+        DFHMDF POS=(4,63),ATTRB=(ASKIP,NORM),LENGTH=16,                X
+               INITIAL='REQUIRED. EITHER',COLOR=TURQUOISE               
+        DFHMDF POS=(5,7),ATTRB=(ASKIP,BRT),LENGTH=8,                   X
+               INITIAL='SURNAME:',COLOR=TURQUOISE                       
+SNAMEM  DFHMDF CASE=MIXED,                                             X
+               POS=(5,16),ATTRB=(UNPROT,NORM,IC),LENGTH=12              
+        DFHMDF POS=(5,29),ATTRB=(PROT,BRT),LENGTH=13,                  X
+               INITIAL='  FIRST NAME:',COLOR=TURQUOISE                  
+FNAMEM  DFHMDF CASE=MIXED,                                             X
+               POS=(5,43),ATTRB=(UNPROT,NORM),LENGTH=7                  
+        DFHMDF POS=(5,51),ATTRB=(PROT,NORM),LENGTH=1                    
+        DFHMDF POS=(5,63),ATTRB=(ASKIP,NORM),LENGTH=15,                X
+               INITIAL='MAY BE PARTIAL.',COLOR=TURQUOISE                
+        DFHMDF POS=(7,4),ATTRB=(ASKIP,NORM),LENGTH=30,                 X
+               INITIAL='FOR INDIVIDUAL RECORDS, ENTER:'                 
+        DFHMDF POS=(8,63),ATTRB=(ASKIP,NORM),LENGTH=16,                X
+               INITIAL='PRINTER REQUIRED',COLOR=TURQUOISE               
+        DFHMDF POS=(9,7),ATTRB=(ASKIP,BRT),LENGTH=13,                  X
+               INITIAL='REQUEST TYPE:',COLOR=TURQUOISE                  
+REQM    DFHMDF CASE=MIXED,                                             X
+               POS=(9,21),ATTRB=(UNPROT,NORM),LENGTH=1                  
+        DFHMDF POS=(9,23),ATTRB=(ASKIP,BRT),LENGTH=10,                 X
+               INITIAL='  ACCOUNT: ',COLOR=TURQUOISE                    
+ACCTM   DFHMDF CASE=MIXED,                                             X
+               POS=(9,34),ATTRB=(NUM,NORM),LENGTH=5                     
+        DFHMDF POS=(9,40),ATTRB=(ASKIP,BRT),LENGTH=10,                 X
+               INITIAL='  PRINTER:',COLOR=TURQUOISE                     
+PRTRM   DFHMDF CASE=MIXED,                                             X
+               POS=(9,51),ATTRB=(UNPROT,NORM),LENGTH=4                  
+        DFHMDF POS=(9,56),ATTRB=(ASKIP,NORM),LENGTH=21,                X
+               INITIAL='       ONLY FOR PRINT',COLOR=TURQUOISE          
+        DFHMDF POS=(10,63),ATTRB=(ASKIP,NORM),LENGTH=9,                X
+               INITIAL='REQUESTS.',COLOR=TURQUOISE                      
+        DFHMDF POS=(11,7),ATTRB=(ASKIP,NORM),LENGTH=53,                X
+               INITIAL='REQUEST TYPES:  D = DISPLAY    A = ADD     X = X
+               DELETE',COLOR=TURQUOISE                                  
+        DFHMDF POS=(12,23),ATTRB=(ASKIP,NORM),LENGTH=25,               X
+               INITIAL='P = PRINT      M = MODIFY',COLOR=TURQUOISE      
+        DFHMDF POS=(14,4),ATTRB=(ASKIP,NORM),LENGTH=18,                X
+               INITIAL='THEN PRESS "ENTER"',COLOR=TURQUOISE             
+        DFHMDF POS=(14,35),ATTRB=(ASKIP,NORM),LENGTH=28,               X
+               INITIAL='-OR-   PRESS "CLEAR" TO EXIT',COLOR=TURQUOISE   
+SUMTTLM DFHMDF CASE=MIXED,                                             X
+               POS=(16,1),ATTRB=(ASKIP,DRK),LENGTH=79,                 X
+               INITIAL='ACCT    SURNAME       FIRST   MI  TTL   ADDRESSX
+                                  ST      LIMIT',COLOR=TURQUOISE        
+SUMLNM  DFHMDF CASE=MIXED,                                             X
+               POS=(17,1),ATTRB=(ASKIP,NORM),LENGTH=79,OCCURS=6         
+MSGM    DFHMDF CASE=MIXED,                                             X
+               POS=(24,1),ATTRB=(ASKIP,BRT),LENGTH=70                   
+*                                                                       
+*       DETAIL MAP.                                                     
+ACCTDTL DFHMDI SIZE=(24,80),CTRL=(FREEKB)                               
+        DFHMDF POS=(1,1),ATTRB=(ASKIP,NORM),LENGTH=13,                 X
+               INITIAL='ACCOUNT FILE: ',COLOR=TURQUOISE                 
+TITLED  DFHMDF CASE=MIXED,                                             X
+               POS=(1,15),ATTRB=(ASKIP,NORM),LENGTH=14,                X
+               INITIAL='RECORD DISPLAY',COLOR=TURQUOISE                 
+        DFHMDF POS=(3,1),ATTRB=(ASKIP,NORM),LENGTH=11,                 X
+               INITIAL='ACCOUNT NO:',COLOR=TURQUOISE                    
+ACCTD   DFHMDF CASE=MIXED,                                             X
+               POS=(3,13),ATTRB=(ASKIP,NORM),LENGTH=5                   
+        DFHMDF POS=(3,25),ATTRB=(ASKIP,NORM),LENGTH=10,                X
+               INITIAL='SURNAME:  ',COLOR=TURQUOISE                     
+SNAMED  DFHMDF CASE=MIXED,                                             X
+               POS=(3,36),ATTRB=(UNPROT,NORM,IC),                      X
+               LENGTH=18                                                
+        DFHMDF POS=(3,55),ATTRB=(PROT,NORM),LENGTH=1                    
+        DFHMDF POS=(4,25),ATTRB=(ASKIP,NORM),LENGTH=10,                X
+               INITIAL='FIRST:    ',COLOR=TURQUOISE                     
+FNAMED  DFHMDF CASE=MIXED,                                             X
+               POS=(4,36),ATTRB=(UNPROT,NORM),LENGTH=12                 
+        DFHMDF POS=(4,49),ATTRB=(PROT,NORM),LENGTH=6,                  X
+               INITIAL='   MI:',COLOR=TURQUOISE                         
+MID     DFHMDF CASE=MIXED,                                             X
+               POS=(4,56),ATTRB=(UNPROT,NORM),LENGTH=1                  
+        DFHMDF POS=(4,58),ATTRB=(ASKIP,NORM),LENGTH=7,                 X
+               INITIAL=' TITLE:',COLOR=TURQUOISE                        
+TTLD    DFHMDF CASE=MIXED,                                             X
+               POS=(4,66),ATTRB=(UNPROT,NORM),LENGTH=4                  
+        DFHMDF POS=(4,71),ATTRB=(PROT,NORM),LENGTH=1                    
+        DFHMDF POS=(5,1),ATTRB=(ASKIP,NORM),LENGTH=10,                 X
+               INITIAL='TELEPHONE:',COLOR=TURQUOISE                     
+TELD    DFHMDF CASE=MIXED,                                             X
+               POS=(5,12),ATTRB=(NUM,NORM),LENGTH=10                    
+        DFHMDF POS=(5,23),ATTRB=(ASKIP,NORM),LENGTH=12,                X
+               INITIAL='  ADDRESS:  ',COLOR=TURQUOISE                   
+ADDR1D  DFHMDF CASE=MIXED,                                             X
+               POS=(5,36),ATTRB=(UNPROT,NORM),LENGTH=24                 
+        DFHMDF POS=(5,61),ATTRB=(PROT,NORM),LENGTH=1                    
+ADDR2D  DFHMDF CASE=MIXED,                                             X
+               POS=(6,36),ATTRB=(UNPROT,NORM),LENGTH=24                 
+        DFHMDF POS=(6,61),ATTRB=(PROT,NORM),LENGTH=1                    
+ADDR3D  DFHMDF CASE=MIXED,                                             X
+               POS=(7,36),ATTRB=(UNPROT,NORM),LENGTH=24                 
+        DFHMDF POS=(7,61),ATTRB=(PROT,NORM),LENGTH=1                    
+        DFHMDF POS=(8,1),ATTRB=(ASKIP,NORM),LENGTH=22,                 X
+               INITIAL='OTHERS WHO MAY CHARGE:',COLOR=TURQUOISE         
+AUTH1D  DFHMDF CASE=MIXED,                                             X
+               POS=(9,1),ATTRB=(UNPROT,NORM),LENGTH=32                  
+        DFHMDF POS=(9,34),ATTRB=(PROT,NORM),LENGTH=1                    
+AUTH2D  DFHMDF CASE=MIXED,                                             X
+               POS=(9,36),ATTRB=(UNPROT,NORM),LENGTH=32                 
+        DFHMDF POS=(9,69),ATTRB=(PROT,NORM),LENGTH=1                    
+AUTH3D  DFHMDF CASE=MIXED,                                             X
+               POS=(10,1),ATTRB=(UNPROT,NORM),LENGTH=32                 
+        DFHMDF POS=(10,34),ATTRB=(PROT,NORM),LENGTH=1                   
+AUTH4D  DFHMDF CASE=MIXED,                                             X
+               POS=(10,36),ATTRB=(UNPROT,NORM),LENGTH=32                
+        DFHMDF POS=(10,69),ATTRB=(PROT,NORM),LENGTH=1                   
+        DFHMDF POS=(12,1),ATTRB=(ASKIP,NORM),LENGTH=17,                X
+               INITIAL='NO. CARDS ISSUED:',COLOR=TURQUOISE              
+CARDSD  DFHMDF CASE=MIXED,                                             X
+               POS=(12,19),ATTRB=(NUM,NORM),LENGTH=1                    
+        DFHMDF POS=(12,21),ATTRB=(ASKIP,NORM),LENGTH=16,               X
+               INITIAL='    DATE ISSUED:',COLOR=TURQUOISE               
+IMOD    DFHMDF CASE=MIXED,                                             X
+               POS=(12,38),ATTRB=(UNPROT,NORM),LENGTH=2                 
+IDAYD   DFHMDF CASE=MIXED,                                             X
+               POS=(12,41),ATTRB=(UNPROT,NORM),LENGTH=2                 
+IYRD    DFHMDF CASE=MIXED,                                             X
+               POS=(12,44),ATTRB=(UNPROT,NORM),LENGTH=2                 
+        DFHMDF POS=(12,47),ATTRB=(ASKIP,NORM),LENGTH=12,               X
+               INITIAL='     REASON:',COLOR=TURQUOISE                   
+RSND    DFHMDF CASE=MIXED,                                             X
+               POS=(12,60),ATTRB=(UNPROT,NORM),LENGTH=1                 
+        DFHMDF POS=(12,62),ATTRB=(ASKIP,NORM),LENGTH=1                  
+        DFHMDF POS=(13,1),ATTRB=(ASKIP,NORM),LENGTH=10,                X
+               INITIAL='CARD CODE:',COLOR=TURQUOISE                     
+CCODED  DFHMDF CASE=MIXED,                                             X
+               POS=(13,12),ATTRB=(UNPROT,NORM),LENGTH=1                 
+        DFHMDF POS=(13,14),ATTRB=(ASKIP,NORM),LENGTH=1                  
+        DFHMDF POS=(13,25),ATTRB=(ASKIP,NORM),LENGTH=12,               X
+               INITIAL='APPROVED BY:',COLOR=TURQUOISE                   
+APPRD   DFHMDF CASE=MIXED,                                             X
+               POS=(13,38),ATTRB=(UNPROT,NORM),LENGTH=3                 
+        DFHMDF POS=(13,42),ATTRB=(ASKIP,NORM),LENGTH=1                  
+        DFHMDF POS=(13,52),ATTRB=(ASKIP,NORM),LENGTH=14,               X
+               INITIAL='SPECIAL CODES:',COLOR=TURQUOISE                 
+SCODE1D DFHMDF CASE=MIXED,                                             X
+               POS=(13,67),ATTRB=(UNPROT,NORM),LENGTH=1                 
+SCODE2D DFHMDF CASE=MIXED,                                             X
+               POS=(13,69),ATTRB=(UNPROT,NORM),LENGTH=1                 
+SCODE3D DFHMDF CASE=MIXED,                                             X
+               POS=(13,71),ATTRB=(UNPROT,NORM),LENGTH=1                 
+        DFHMDF POS=(13,73),ATTRB=(ASKIP,NORM),LENGTH=1                  
+STATTLD DFHMDF CASE=MIXED,                                             X
+               POS=(15,1),ATTRB=(ASKIP,NORM),LENGTH=15,                X
+               INITIAL='ACCOUNT STATUS:',COLOR=TURQUOISE                
+STATD   DFHMDF CASE=MIXED,                                             X
+               POS=(15,17),ATTRB=(ASKIP,NORM),LENGTH=2                  
+LIMTTLD DFHMDF CASE=MIXED,                                             X
+               POS=(15,20),ATTRB=(ASKIP,NORM),LENGTH=18,               X
+               INITIAL='     CHARGE LIMIT:',COLOR=TURQUOISE             
+LIMITD  DFHMDF CASE=MIXED,                                             X
+               POS=(15,39),ATTRB=(ASKIP,NORM),LENGTH=8                  
+HISTTLD DFHMDF CASE=MIXED,                                             X
+               POS=(17,1),ATTRB=(ASKIP,NORM),LENGTH=71,                X
+               INITIAL='HISTORY:   BALANCE      BILLED        AMOUNT   X
+                   PAID          AMOUNT',COLOR=TURQUOISE                
+HIST1D  DFHMDF CASE=MIXED,                                             X
+               POS=(18,11),ATTRB=(ASKIP,NORM),LENGTH=61                 
+HIST2D  DFHMDF CASE=MIXED,                                             X
+               POS=(19,11),ATTRB=(ASKIP,NORM),LENGTH=61                 
+HIST3D  DFHMDF CASE=MIXED,                                             X
+               POS=(20,11),ATTRB=(ASKIP,NORM),LENGTH=61                 
+MSGD    DFHMDF CASE=MIXED,                                             X
+               POS=(22,1),ATTRB=(ASKIP,BRT),LENGTH=70                   
+VFYD    DFHMDF CASE=MIXED,                                             X
+               POS=(22,72),ATTRB=(ASKIP,NORM),LENGTH=1                  
+*                                                                       
+*       ERROR MAP.                                                      
+ACCTERR DFHMDI SIZE=(24,80),CTRL=FREEKB                                 
+        DFHMDF POS=(4,1),ATTRB=(ASKIP,NORM),LENGTH=26,                 X
+               INITIAL='ACCOUNT FILE: ERROR REPORT',COLOR=TURQUOISE     
+        DFHMDF POS=(6,1),ATTRB=(ASKIP,NORM),LENGTH=12,                 X
+               INITIAL='TRANSACTION ',COLOR=TURQUOISE                   
+TRANE   DFHMDF CASE=MIXED,                                             X
+               POS=(6,14),ATTRB=(ASKIP,BRT),LENGTH=4                    
+        DFHMDF POS=(6,19),ATTRB=(ASKIP,NORM),LENGTH=23,                X
+               INITIAL=' HAS FAILED IN PROGRAM ',COLOR=TURQUOISE        
+PGME    DFHMDF CASE=MIXED,                                             X
+               POS=(6,43),ATTRB=(ASKIP,BRT),LENGTH=8                    
+        DFHMDF POS=(6,52),ATTRB=(ASKIP,NORM),LENGTH=11,                X
+               INITIAL=' BECAUSE OF',COLOR=TURQUOISE                    
+RSNE    DFHMDF CASE=MIXED,                                             X
+               POS=(8,1),ATTRB=(ASKIP,BRT),LENGTH=60                    
+FILEE   DFHMDF CASE=MIXED,                                             X
+               POS=(10,1),ATTRB=(ASKIP,BRT),LENGTH=22                   
+        DFHMDF POS=(12,1),ATTRB=(ASKIP,NORM),LENGTH=60,                X
+               INITIAL='PLEASE ASK YOUR SUPERVISOR TO CONVEY THIS INFORX
+               MATION TO THE',COLOR=TURQUOISE                           
+        DFHMDF POS=(13,1),ATTRB=(ASKIP,NORM),LENGTH=17,                X
+               INITIAL='OPERATIONS STAFF.',COLOR=TURQUOISE              
+        DFHMDF POS=(15,1),ATTRB=(ASKIP,NORM),LENGTH=64,                X
+               INITIAL='THEN PRESS "CLEAR".  THIS TERMINAL IS NO LONGERX
+                UNDER CONTROL OF',COLOR=TURQUOISE                       
+        DFHMDF POS=(16,1),ATTRB=(ASKIP,NORM),LENGTH=23,                X
+               INITIAL='THE "ACCT" APPLICATION.',COLOR=TURQUOISE        
+        DFHMDF POS=(18,1),ATTRB=(ASKIP,NORM),LENGTH=64,                X
+               INITIAL='THE RECORD UPDATE HAS BEEN BACKED OUT - USE INQX
+               UIRE TRANSACTION ',COLOR=TURQUOISE                       
+        DFHMDF POS=(19,1),ATTRB=(ASKIP,NORM),LENGTH=64,                X
+               INITIAL='TO VERIFY',COLOR=TURQUOISE                      
+*                                                                       
+*       MESSAGE MAP.                                                    
+ACCTMSG DFHMDI SIZE=(24,80),CTRL=FREEKB                                 
+MSG     DFHMDF CASE=MIXED,                                             X
+               POS=(1,1),ATTRB=(ASKIP,NORM),LENGTH=79                   
+*       CONFIRM MAP                                                     
+CONFIRM DFHMDI SIZE=(24,80),CTRL=FREEKB                                 
+        DFHMDF POS=(6,14),ATTRB=(ASKIP,BRT,FSET),LENGTH=56,            X
+               CASE=MIXED,                                             X
+               INITIAL='The update has been processed but the task has X
+               not ended',COLOR=TURQUOISE                               
+        DFHMDF POS=(8,14),ATTRB=(ASKIP,BRT),LENGTH=56,                 X
+               CASE=MIXED,                                             X
+               INITIAL='If you are skeptical, in the UNIX environment yX
+               ou may',COLOR=TURQUOISE                                  
+        DFHMDF POS=(9,14),ATTRB=(ASKIP,BRT),LENGTH=56,                 X
+               CASE=MIXED,                                             X
+               INITIAL='"jump" to the other session and inquire upon thX
+               e record ',COLOR=TURQUOISE                               
+        DFHMDF POS=(10,14),ATTRB=(ASKIP,BRT),LENGTH=56,                X
+               CASE=MIXED,                                             X
+               INITIAL='Just updated',COLOR=TURQUOISE                   
+        DFHMDF POS=(12,14),ATTRB=(ASKIP,BRT),LENGTH=56,                X
+               CASE=MIXED,                                             X
+               INITIAL='When ready to continue:',COLOR=TURQUOISE        
+        DFHMDF POS=(13,14),ATTRB=(ASKIP,BRT),LENGTH=56,                X
+               CASE=MIXED,                                             X
+               INITIAL='Press enter to commit the update and end the trX
+               ansaction',COLOR=TURQUOISE                               
+        DFHMDF POS=(14,14),ATTRB=(ASKIP,BRT),LENGTH=56,                X
+               CASE=MIXED,                                             X
+               INITIAL='Press PF9 to abort the transaction and backout X
+               the ',COLOR=TURQUOISE                                    
+        DFHMDF POS=(15,14),ATTRB=(ASKIP,BRT),LENGTH=56,                X
+               CASE=MIXED,                                             X
+               INITIAL='update',COLOR=TURQUOISE                         
+ZCCTMN2 DFHMDI SIZE=(24,80),                                           X
+               COLUMN=1,LINE=1
+MNUNAME DFHMDF CASE=MIXED,                                             X
+               POS=(01,10),                                            X
+               LENGTH=60,COLOR=TURQUOISE,                              X
+               JUSTIFY=(LEFT,SPACE),                                   X
+               ATTRB=(NORM,PROT),                                      X
+               XINIT=20
+        DFHMDF POS=(05,19),                                            X
+               LENGTH=04,COLOR=YELLOW,                                 X
+               JUSTIFY=(LEFT,SPACE),                                   X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='ACCT'
+        DFHMDF POS=(05,27),                                            X
+               LENGTH=35,COLOR=TURQUOISE,                              X
+               JUSTIFY=(LEFT,SPACE),                                   X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='INQUIRY/MAINTENANCE'
+        DFHMDF POS=(11,19),                                            X
+               LENGTH=04,COLOR=YELLOW,                                 X
+               JUSTIFY=(LEFT,SPACE),                                   X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='VSC2'
+        DFHMDF POS=(11,27),                                            X
+               LENGTH=35,COLOR=TURQUOISE,                              X
+               JUSTIFY=(LEFT,SPACE),                                   X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='INQ/MAINT DEMO'
+        DFHMDF POS=(17,19),                                            X
+               LENGTH=04,COLOR=YELLOW,                                 X
+               JUSTIFY=(LEFT,SPACE),                                   X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='OSVS'
+        DFHMDF POS=(17,27),                                            X
+               LENGTH=35,COLOR=TURQUOISE,                              X
+               JUSTIFY=(LEFT,SPACE),                                   X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='INQ/MAINT DEMO '
+        DFHMDF POS=(23,01),                                            X
+               LENGTH=09,COLOR=TURQUOISE,                              X
+               ATTRB=(ASKIP,NORM),                                     X
+               CASE=MIXED,                                             X
+               INITIAL='Function:'
+        DFHMDF POS=(23,11),                                            X
+               LENGTH=69,COLOR=RED,                                    X
+               JUSTIFY=(LEFT,SPACE),                                   X
+               ATTRB=(NORM,UNPROT,IC),                                 X
+               XINIT=20
+        DFHMSD TYPE=FINAL
+        END

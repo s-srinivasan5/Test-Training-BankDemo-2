@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<x:dirset xmlns:x="http://microfocus.com/directivesset" schemaVersion="1.1">
+    <x:directive handler="project.bmsSettings" id="longmacros" name="/HLL"/>
+    <x:directive handler="project.bmsSettings" id="coboldir" name="/COBOL=src/copybook/bms"/>
+    <x:directive handler="project.bmsSettings" id="targetdir" name="/BINARY=loadlib/bms"/>
+</x:dirset>

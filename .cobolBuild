@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BankDemo2" default="combinedbuild" basedir="." xmlns:ac="antlib:net.sf.antcontrib">
+	<taskdef resource="com/microfocus/ant/antlib.xml"/>
+	<!--  ***********************************  -->
+	<!--  * General property initialisation *  -->
+	<!--  ***********************************  -->
+	<property name="mf.createCar" value="false"/>
+	<property name="pathVar.PROJECT_LOC" value="${basedir}"/>
+	<property name="pathVar.WORKSPACE_LOC" value="${env.WORKSPACE_LOC}"/>
+	<property name="pathVar.ECLIPSE_HOME" value="${env.ECLIPSE_HOME}"/>
+	<property name="pathVar.PARENT_LOC" value="${env.PARENT_LOC}"/>
+	<property environment="env"/>
+	<property name="mf.projectLocation.BankDemo2" value="${basedir}"/>
+	<property name="mf.cfg" value="New_Configuration"/>
+	<property name="mf.cfgtarget" value="cfg.${mf.cfg}"/>
+	<property name="mf.forceCompile" value="true"/>
+	<property name="mf.buildThreadCount" value="1"/>
+	<property name="mf.useDirectiveSet" value="true"/>
+	<property name="mf.settingsDir" value=".settings"/>
+	<property name="mf.connectionName" value=""/>
+	<property name="mf.projectName" value=""/>
+	<property name="mf.failOnError" value="false"/>
+	<property name="mf.cobolFailOnError" value="${mf.failOnError}"/>
+	<property name="mf.cobollinkFailOnError" value="${mf.failOnError}"/>
+	<property name="mf.entryPoint.cfg.New_Configuration" value=""/>
+	<property name="mf.destDir.cfg.New_Configuration" value="${basedir}/loadlib/cobol"/>
+	<property name="mf.entryPoint.file" value=""/>
+	<property name="mf.sdkLocation" value="c:\Program Files (x86)\Windows Kits\10\Bin\10.0.17763.0\"/>
+	<property name="mf.buildToolsLocation" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\Host"/>
+	<target name="printLocations">
+		<echo message="Project Location: &apos;pathVar.PROJECT_LOC&apos;=${pathVar.PROJECT_LOC}"/>
+		<echo message="Project Location: &apos;pathVar.WORKSPACE_LOC&apos;=${pathVar.WORKSPACE_LOC}"/>
+		<echo message="Project Location: &apos;pathVar.ECLIPSE_HOME&apos;=${pathVar.ECLIPSE_HOME}"/>
+		<echo message="Project Location: &apos;pathVar.PARENT_LOC&apos;=${pathVar.PARENT_LOC}"/>
+		<echo message="Project Location: &apos;project.BankDemo2&apos;=${mf.projectLocation.BankDemo2}"/>
+	</target>
+	<!--  ******************************  -->
+	<!--  * OS-specific initialisation *  -->
+	<!--  ******************************  -->
+	<property name="carext" value=".car"/>
+	<property name="bmsFailOnError" value="${mf.failOnError}"/>
+	<condition property="windows">
+		<os family="windows"/>
+	</condition>
+	<condition property="unix">
+		<os family="unix"/>
+	</condition>
+	<ac:if>
+		<isset property="windows"/>
+		<then>
+			<property name="dllext" value=".dll"/>
+			<property name="exeext" value=".exe"/>
+			<property name="mf.objext" value=".obj"/>
+			<property name="mf.equalsInDir" value="="/>
+			<property name="pathVar.pS" value=";"/>
+			<property name="shell" value="cmd"/>
+			<property name="shell.ext" value=".bat"/>
+			<property name="shell.arg" value="/c"/>
+			<property name="script.header" value="@rem MS-DOS Batch File"/>
+		</then>
+	</ac:if>
+	<ac:if>
+		<isset property="unix"/>
+		<then>
+			<property name="dllext" value=".so"/>
+			<property name="exeext" value=""/>
+			<property name="mf.objext" value=".o"/>
+			<property name="mf.equalsInDir" value="="/>
+			<property name="pathVar.pS" value=":"/>
+			<property name="shell" value="sh"/>
+			<property name="shell.ext" value=".sh"/>
+			<property name="shell.arg" value="-c"/>
+			<property name="script.header" value="#!/bin/sh"/>
+		</then>
+	</ac:if>
+	<!-- Assembler Macro locations -->
+	<mffilelist id="assembler.macro.locations">
+		<path type="asmmacro" name="${mf.projectLocation.BankDemo2}"/>
+	</mffilelist>
+	<!-- IMS Copy locations -->
+	<mffilelist id="ims.copy.locations">
+		<path type="imscpy" name="${mf.projectLocation.BankDemo2}"/>
+	</mffilelist>
+	<!-- JCL include locations -->
+	<mffilelist id="jcl.include.locations">
+		<path type="jclinclude" name="${mf.projectLocation.BankDemo2}"/>
+	</mffilelist>
+	<!-- Copypath enabled output locations -->
+	<mffilelist id="output.copybook.enabled.locations">
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}"/>
+	</mffilelist>
+	<!--  ***************************  -->
+	<!--  * BMS compiler directives *  -->
+	<!--  ***************************  -->
+	<!-- bms_directive_set_1 -->
+	<mfdirlist id="bms_directive_set_1">
+	</mfdirlist>
+	<!--  ********************  -->
+	<!--  * BMS source files *  -->
+	<!--  ********************  -->
+	<!-- bms_file_set_1 -->
+	<mffilelist type="srcfile" id="bms_file_set_1" srcdir="${basedir}">
+		<file name="ACCTSET.bms" srcdir="src/PLI"/>
+		<file name="APCTSET.bms" srcdir="src/PLI"/>
+		<file name="MBANK10.bms" srcdir="src/bms"/>
+	</mffilelist>
+	<target name="FileCompile.New_Configuration.bms">
+		<bms useDirectiveSet="${mf.useDirectiveSet}" configuration="New Configuration" srcfile="${fullFileName}" destdir="${basedir}/loadlib/cobol" threadCount="${mf.buildThreadCount}" failonerror="${bmsFailOnError}" srcdir="${basedir}" forceCompile="${mf.forceCompile}" settingsDir="${mf.settingsDir}">
+			<mfdirlist refid="bms_directive_set_1"/>
+		</bms>
+	</target>
+	<!--  *****************************  -->
+	<!--  * COBOL compiler directives *  -->
+	<!--  *****************************  -->
+	<!-- cobol_directive_set_1 -->
+	<mfdirlist id="cobol_directive_set_1">
+		<directive name="SOURCETABSTOP" id="sourcetabstop" value="4"/>
+		<directive name="COPYEXT" id="copyext" value="cpy,cbl"/>
+		<directive name="COLLECTION" id="collection" value="BankDemo2"/>
+		<directive name="NOCOBOLDIR" id="nocoboldir"/>
+	</mfdirlist>
+	<!--  **********************  -->
+	<!--  * COBOL source files *  -->
+	<!--  **********************  -->
+	<!-- cobol_file_set_1 -->
+	<mffilelist type="srcfile" id="cobol_file_set_1" srcdir="${basedir}">
+		<file name="BBANK10P.cbl" srcdir="src/cbl"/>
+		<file name="DBANK01P.cbl" srcdir="src/cbl"/>
+		<file name="DBANK51P.cbl" srcdir="src/cbl"/>
+		<file name="DBANK52P.cbl" srcdir="src/cbl"/>
+		<file name="SBANK00P.cbl" srcdir="src/cbl"/>
+		<file name="SBANK10P.cbl" srcdir="src/cbl"/>
+		<file name="ZBNKEXT1.cbl" srcdir="src/cbl"/>
+		<file name="ZBNKPRT1.cbl" srcdir="src/cbl"/>
+		<file name="ZBNKPRT2.cbl" srcdir="src/cbl"/>
+	</mffilelist>
+	<!-- COBOL copybook locations -->
+	<mffilelist id="cobol.copybook.locations">
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/listing"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/loadlib"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/loadlib/bms"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/loadlib/cobol"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/src"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/src/PLI"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/src/bms"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/src/cbl"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/src/copybook"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/src/copybook/bms"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/src/jcl"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/system"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/system/Data"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/system/logs"/>
+		<path type="copybook" name="${mf.projectLocation.BankDemo2}/system/rdef"/>
+	</mffilelist>
+	<!--  ********************************  -->
+	<!--  * Source File Compile and Link *  -->
+	<!--  ********************************  -->
+	<!-- Configuration:New_Configuration -->
+	<target name="FileCompile.New_Configuration.cobol">
+		<cobol debug="true" configuration="New Configuration" analysisData="${analysisData}" threadCount="${mf.buildThreadCount}" settingsDir="${mf.settingsDir}" threadedRts="true" analysisDataDir="${analysisDataDir}" useDirectiveSet="${mf.useDirectiveSet}" srcfile="${fullFileName}" destdir="${basedir}/loadlib/cobol" is64bit="false" failonerror="${mf.cobolFailOnError}" srcdir="${basedir}" forceCompile="${mf.forceCompile}" connectionName="${mf.connectionName}" projectName="${mf.projectName}" desttype="obj">
+			<mffilelist refid="cobol.copybook.locations"/>
+			<mfdirlist refid="cobol_directive_set_1"/>
+		</cobol>
+		<cobollink debug="true" destfile="${fileBaseName}" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+			<mffilelist srcdir="${basedir}/loadlib/cobol">
+				<file name="${fileBaseName}${mf.objext}"/>
+			</mffilelist>
+			<mffilelist refid="cobol.mfunit.entry.point.files"/>
+		</cobollink>
+	</target>
+	<!--  ****************  -->
+	<!--  * Object files *  -->
+	<!--  ****************  -->
+	<!-- Default -->
+	<mffilelist id="cobol.default.object.files.New Configuration" srcdir="${basedir}/loadlib/cobol" type="objfile">
+		<file name="BBANK10P${mf.objext}"/>
+		<file name="DBANK01P${mf.objext}"/>
+		<file name="DBANK51P${mf.objext}"/>
+		<file name="DBANK52P${mf.objext}"/>
+		<file name="SBANK00P${mf.objext}"/>
+		<file name="SBANK10P${mf.objext}"/>
+		<file name="ZBNKEXT1${mf.objext}"/>
+		<file name="ZBNKPRT1${mf.objext}"/>
+		<file name="ZBNKPRT2${mf.objext}"/>
+	</mffilelist>
+	<!--  ********************************  -->
+	<!--  * MFUnit entry point file list *  -->
+	<!--  ********************************  -->
+	<mffilelist type="linkfile" id="cobol.mfunit.entry.point.files">
+		<file name="${mf.entryPoint.file}"/>
+	</mffilelist>
+	<target name="cobol.createcar.cfg.New_Configuration.property">
+		<condition property="mf.createCar.isTrue">
+			<istrue value="${mf.createCar}"/>
+		</condition>
+	</target>
+	<target name="cobol.createcar.cfg.New_Configuration" depends="cobol.createcar.cfg.New_Configuration.property" if="mf.createCar.isTrue">
+	</target>
+	<!-- cfg.New_Configuration -->
+	<target name="combinedbuild.cfg.New_Configuration" depends="printLocations,pre.build.cfg.New_Configuration,bms.cfg.New_Configuration,asm.cfg.New_Configuration,ims.cfg.New_Configuration,nature.specific.build.cfg.New_Configuration,post.build.cfg.New_Configuration,deploy.cfg.New_Configuration">
+	</target>
+	<target name="imscobbuild.cfg.New_Configuration" depends="printLocations,pre.build.cfg.New_Configuration,ims.cfg.New_Configuration,nature.specific.build.cfg.New_Configuration,post.build.cfg.New_Configuration,deploy.cfg.New_Configuration">
+	</target>
+	<target name="bmsbuild.cfg.New_Configuration" depends="printLocations,bms.cfg.New_Configuration">
+	</target>
+	<target name="asm.cfg.New_Configuration">
+		<echo message="No Assembler programs to compile"/>
+		<echo message="No Assembler Linker files to compile"/>
+	</target>
+	<target name="bms.cfg.New_Configuration">
+		<bms useDirectiveSet="${mf.useDirectiveSet}" configuration="New Configuration" destdir="${basedir}/loadlib/cobol" threadCount="${mf.buildThreadCount}" failonerror="${bmsFailOnError}" forceCompile="${mf.forceCompile}" settingsDir="${mf.settingsDir}">
+			<mfdirlist refid="bms_directive_set_1"/>
+			<mffilelist refid="bms_file_set_1"/>
+		</bms>
+	</target>
+	<target name="ims.cfg.New_Configuration">
+		<echo message="No DBD files to compile"/>
+		<echo message="No MFS files to compile"/>
+		<echo message="No PSB files to compile"/>
+	</target>
+	<target name="New_Configuration.FileCompile.Local">
+		<property name="fileextn.cbl" value="cobol"/>
+		<property name="fileextn.cob" value="cobol"/>
+		<property name="fileextn.pco" value="cobol"/>
+		<property name="fileextn.sqb" value="cobol"/>
+		<property name="fileextn.eco" value="cobol"/>
+		<property name="fileextn.bms" value="bms"/>
+		<property name="fileextn.mlc" value="asm"/>
+		<property name="fileextn.asm" value="asm"/>
+		<property name="fileextn.cap" value="asm"/>
+		<property name="fileextn.lin" value="lin"/>
+		<property name="fileextn.mac" value="macro"/>
+		<property name="fileextn.cpy" value="macro"/>
+		<property name="fileextn.jcl" value="jcl"/>
+		<property name="fileextn.vse" value="jcl"/>
+		<property name="fileextn.dbd" value="dbd"/>
+		<property name="fileextn.psb" value="psb"/>
+		<property name="fileextn.mfs" value="mfs"/>
+		<property name="fileextn.rex" value="rexx"/>
+		<property name="fileextn.rxf" value="rexx"/>
+		<property name="fileextn.tso" value="clist"/>
+		<property name="fileextn.ezt" value="easytrieve"/>
+		<property name="fileextn.pli" value="pli"/>
+		<property name="fileextn.pl1" value="pli"/>
+		<executefilecompile filesList="${filesList.Local}"/>
+	</target>
+	<!--  *************************  -->
+	<!--  * Configuration targets *  -->
+	<!--  *************************  -->
+	<!-- cfg.New_Configuration -->
+	<target name="cobolbuild.cfg.New_Configuration" depends="printLocations,pre.build.cfg.New_Configuration,nature.specific.build.cfg.New_Configuration,post.build.cfg.New_Configuration,deploy.cfg.New_Configuration"/>
+	<target name="nature.specific.build.cfg.New_Configuration" depends="cobol.cfg.New_Configuration"/>
+	<target name="cobol.cfg.New_Configuration" depends="cobol.compile.cfg.New_Configuration,cobol.link.cfg.New_Configuration"/>
+	<target name="New_Configuration.FileCompile">
+		<property name="fileextn.cbl" value="cobol"/>
+		<property name="fileextn.cob" value="cobol"/>
+		<property name="fileextn.pco" value="cobol"/>
+		<property name="fileextn.sqb" value="cobol"/>
+		<property name="fileextn.eco" value="cobol"/>
+		<property name="fileextn.bms" value="bms"/>
+		<property name="fileextn.mlc" value="asm"/>
+		<property name="fileextn.asm" value="asm"/>
+		<property name="fileextn.cap" value="asm"/>
+		<property name="fileextn.lin" value="lin"/>
+		<property name="fileextn.mac" value="macro"/>
+		<property name="fileextn.cpy" value="macro"/>
+		<property name="fileextn.jcl" value="jcl"/>
+		<property name="fileextn.vse" value="jcl"/>
+		<property name="fileextn.dbd" value="dbd"/>
+		<property name="fileextn.psb" value="psb"/>
+		<property name="fileextn.mfs" value="mfs"/>
+		<property name="fileextn.rex" value="rexx"/>
+		<property name="fileextn.rxf" value="rexx"/>
+		<property name="fileextn.tso" value="clist"/>
+		<property name="fileextn.ezt" value="easytrieve"/>
+		<property name="fileextn.pli" value="pli"/>
+		<property name="fileextn.pl1" value="pli"/>
+		<executefilecompile filesList="${filesList}"/>
+	</target>
+	<target name="cobol.compile.cfg.New_Configuration">
+		<cobol debug="true" configuration="New Configuration" analysisData="${analysisData}" threadCount="${mf.buildThreadCount}" settingsDir="${mf.settingsDir}" threadedRts="true" analysisDataDir="${analysisDataDir}" useDirectiveSet="${mf.useDirectiveSet}" destdir="${basedir}/loadlib/cobol" is64bit="false" failonerror="${mf.cobolFailOnError}" forceCompile="${mf.forceCompile}" connectionName="${mf.connectionName}" projectName="${mf.projectName}" desttype="obj">
+			<mffilelist refid="cobol.copybook.locations"/>
+			<mfdirlist refid="cobol_directive_set_1"/>
+			<mffilelist refid="cobol_file_set_1"/>
+		</cobol>
+	</target>
+	<target name="cobol.link.cfg.New_Configuration">
+		<parallel threadCount="${mf.buildThreadCount}">
+			<cobollink debug="true" destfile="BBANK10P" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="BBANK10P${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+			<cobollink debug="true" destfile="DBANK01P" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="DBANK01P${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+			<cobollink debug="true" destfile="DBANK51P" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="DBANK51P${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+			<cobollink debug="true" destfile="DBANK52P" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="DBANK52P${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+			<cobollink debug="true" destfile="SBANK00P" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="SBANK00P${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+			<cobollink debug="true" destfile="SBANK10P" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="SBANK10P${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+			<cobollink debug="true" destfile="ZBNKEXT1" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="ZBNKEXT1${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+			<cobollink debug="true" destfile="ZBNKPRT1" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="ZBNKPRT1${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+			<cobollink debug="true" destfile="ZBNKPRT2" entrypoint="${mf.entryPoint.cfg.New_Configuration}" sharedRts="true" destdir="${mf.destDir.cfg.New_Configuration}" is64bit="false" objectdir="${basedir}/loadlib/cobol" failonerror="${mf.cobollinkFailOnError}" desttype="dll/cso" threadedRts="true">
+				<mffilelist srcdir="${basedir}/loadlib/cobol">
+					<file name="ZBNKPRT2${mf.objext}"/>
+				</mffilelist>
+				<mffilelist refid="cobol.mfunit.entry.point.files"/>
+			</cobollink>
+		</parallel>
+	</target>
+	<target name="pre.build.cfg.New_Configuration">
+	</target>
+	<target name="post.build.cfg.New_Configuration" depends="cobol.createcar.cfg.New_Configuration">
+	</target>
+	<target name="deploy.cfg.New_Configuration">
+	</target>
+	<target name="clean.cfg.New_Configuration">
+		<bmsclean dsect="true" dsectExtension=".cpy" configuration="New Configuration" failonerror="${bmsFailOnError}" binarydir="${basedir}/loadlib/cobol" copydir="${basedir}" map="true" verbose="false">
+			<mfdirlist refid="bms_directive_set_1"/>
+			<mffilelist refid="bms_file_set_1"/>
+			<mffilelist delete="false" refid="output.copybook.enabled.locations"/>
+		</bmsclean>
+		<cobolclean debug="true" destdir="${basedir}/loadlib/cobol" desttype="dll">
+			<mffilelist refid="cobol_file_set_1"/>
+		</cobolclean>
+	</target>
+	<!--  *******************  -->
+	<!--  * General targets *  -->
+	<!--  *******************  -->
+	<target name="compileSourceLocally">
+		<antcall target="${mf.cfg}.FileCompile.Local" inheritAll="true"/>
+	</target>
+	<target name="clean">
+		<antcall target="clean.${mf.cfgtarget}" inheritAll="true"/>
+	</target>
+	<target name="compileSource">
+		<antcall target="${mf.cfg}.FileCompile" inheritAll="true"/>
+	</target>
+	<target name="cobollink">
+		<antcall target="cobol.link.${mf.cfgtarget}" inheritAll="true"/>
+	</target>
+	<target name="compile" depends="compileSource">
+	</target>
+	<target name="combinedbuild">
+		<antcall target="combinedbuild.${mf.cfgtarget}" inheritAll="true"/>
+	</target>
+	<target name="imscobbuild">
+		<antcall target="imscobbuild.${mf.cfgtarget}" inheritAll="true"/>
+	</target>
+	<target name="bmsbuild">
+		<antcall target="bmsbuild.${mf.cfgtarget}" inheritAll="true"/>
+	</target>
+	<target name="cobolbuild">
+		<antcall target="cobolbuild.${mf.cfgtarget}" inheritAll="true"/>
+	</target>
+</project>
